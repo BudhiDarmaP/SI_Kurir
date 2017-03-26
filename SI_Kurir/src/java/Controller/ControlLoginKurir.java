@@ -5,13 +5,10 @@
  */
 package Controller;
 
+import Model.Kurir;
 import Model.Pelanggan;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Math.random;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Random;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,12 +20,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author budhidarmap
  */
-@WebServlet(name = "ControlDaftarPelanggan", urlPatterns = {"/ControlDaftarPelanggan"})
-public class ControlDaftarPelanggan extends HttpServlet {
-    
+@WebServlet(name = "ControlLoginKurir", urlPatterns = {"/ControlLoginKurir"})
+public class ControlLoginKurir extends HttpServlet {
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
     }
 
     @Override
@@ -43,37 +39,16 @@ public class ControlDaftarPelanggan extends HttpServlet {
         processRequest(request, response);
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            Pelanggan p = new Pelanggan();
-            String timeStamp = new SimpleDateFormat("yyMMdd").format(Calendar.getInstance().getTime());
-            String number ="000";
-            int count=p.panggilID(timeStamp)+1;
-            //generate ID
-            if (count<10) {
-                number="00"+String.valueOf(count);
-            }
-            else if (count<100) {
-                number="0"+String.valueOf(count);
-            }
-            else{
-                number=String.valueOf(count);
-            }
-            //membuat data
-            p.setID(timeStamp+number);
-            p.setNama(request.getParameter("user[name]"));
-            p.setEmail(request.getParameter("user[email]"));
-            p.setNo_tlp(request.getParameter("user[tlp]"));
-            p.setAlamat(request.getParameter("user[address]"));
-            p.setPassword(request.getParameter("user[password]"));
-            //menyimpan data
-            Pelanggan.tambahMember(p);
-            this.tampil(request, response, "PENDAFTARAN MEMBER SUKSES");
+            Kurir k = new Kurir();
+            k.panggilKurir(request.getParameter("user[email]"), request.getParameter("user[password]"));
+            this.tampil(request, response, "Anda Telah Login");
         }
     }
 
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
+    }// </editor-fold>
     public void tampil(HttpServletRequest request, HttpServletResponse response, String information) throws ServletException, IOException {
         RequestDispatcher dispatcher;
         request.setAttribute("info", information);

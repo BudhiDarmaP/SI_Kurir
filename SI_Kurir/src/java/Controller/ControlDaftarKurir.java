@@ -8,10 +8,8 @@ package Controller;
 import Model.Pelanggan;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Math.random;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,9 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author budhidarmap
  */
-@WebServlet(name = "ControlDaftarPelanggan", urlPatterns = {"/ControlDaftarPelanggan"})
-public class ControlDaftarPelanggan extends HttpServlet {
-    
+@WebServlet(name = "ControlDaftarKurir", urlPatterns = {"/ControlDaftarKurir"})
+public class ControlDaftarKurir extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -66,7 +63,7 @@ public class ControlDaftarPelanggan extends HttpServlet {
             p.setPassword(request.getParameter("user[password]"));
             //menyimpan data
             Pelanggan.tambahMember(p);
-            this.tampil(request, response, "PENDAFTARAN MEMBER SUKSES");
+            this.tampil(request, response, "PENDAFTARAN KURIR SUKSES");
         }
     }
 

@@ -71,6 +71,36 @@ public class Pelanggan {
     public void setAlamat(String alamat) {
         this.alamat = alamat;
     }
+    public static int panggilID(String tgl){
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        int index = 0;
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT COUNT (ID) FROM PTI_PELANGGAN WHERE"
+                    + "(ID LIKE '%"+tgl+"%')");
+            rs.next();
+            rs = st.executeQuery("SELECT ID FROM PTI_PELANGGAN WHERE"
+                    + "(ID LIKE '%"+tgl+"%')");
+            while (rs.next()) {
+                index++;
+                System.out.println(index);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return index;
+    }
     public static void tambahMember(Pelanggan p){
         String text = null;
         Connection conn = null;
