@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Thursday-March-23-2017   
+--  File created - Saturday-March-25-2017   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table PTI_KURIR
@@ -10,7 +10,8 @@
 	"NAMA" VARCHAR2(25 BYTE), 
 	"EMAIL" VARCHAR2(20 BYTE), 
 	"NO_TLP" NUMBER, 
-	"ALAMAT" VARCHAR2(150 BYTE)
+	"ALAMAT" VARCHAR2(150 BYTE), 
+	"PASSWORD" VARCHAR2(26 BYTE)
    ) SEGMENT CREATION IMMEDIATE 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
@@ -49,6 +50,7 @@ SET DEFINE OFF;
 --  Constraints for Table PTI_KURIR
 --------------------------------------------------------
 
+  ALTER TABLE "SIA"."PTI_KURIR" MODIFY ("PASSWORD" NOT NULL ENABLE);
   ALTER TABLE "SIA"."PTI_KURIR" ADD CONSTRAINT "PTI_KURIR_PK" PRIMARY KEY ("ID")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645

@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Friday-March-24-2017   
+--  File created - Saturday-March-25-2017   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table PTI_PELANGGAN
@@ -10,7 +10,8 @@
 	"NAMA" VARCHAR2(25 BYTE), 
 	"EMAIL" VARCHAR2(26 BYTE), 
 	"NO_TLP" VARCHAR2(13 BYTE), 
-	"ALAMAT" VARCHAR2(150 BYTE)
+	"ALAMAT" VARCHAR2(150 BYTE), 
+	"PASSWORD" VARCHAR2(26 BYTE)
    ) SEGMENT CREATION IMMEDIATE 
   PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
@@ -18,7 +19,7 @@
   TABLESPACE "USERS" ;
 REM INSERTING into SIA.PTI_PELANGGAN
 SET DEFINE OFF;
-Insert into SIA.PTI_PELANGGAN (ID,NAMA,EMAIL,NO_TLP,ALAMAT) values ('240317001','Mimi Peri','mimiperi@perikhayangan.hvn','00000000000','Langit Ke 7');
+Insert into SIA.PTI_PELANGGAN (ID,NAMA,EMAIL,NO_TLP,ALAMAT,PASSWORD) values ('240317001','Peri Khayangan','mimiperi@perikhayangan.hvn','00000000000','Langit Ke 7','123');
 --------------------------------------------------------
 --  DDL for Index PTI_PELANGGAN_PK
 --------------------------------------------------------
@@ -50,6 +51,7 @@ Insert into SIA.PTI_PELANGGAN (ID,NAMA,EMAIL,NO_TLP,ALAMAT) values ('240317001',
 --  Constraints for Table PTI_PELANGGAN
 --------------------------------------------------------
 
+  ALTER TABLE "SIA"."PTI_PELANGGAN" MODIFY ("PASSWORD" NOT NULL ENABLE);
   ALTER TABLE "SIA"."PTI_PELANGGAN" ADD CONSTRAINT "PTI_PELANGGAN_PK" PRIMARY KEY ("ID")
   USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
   STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
