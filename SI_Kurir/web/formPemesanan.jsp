@@ -4,6 +4,7 @@
     Author     : budhidarmap
 --%>
 
+<%@page import="Model.Pengiriman"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -46,7 +47,7 @@
 
                                 <div class="prompt jarak">
                                     <div class="field" data-fieldname="Jarak">
-                                        <input id="telepon" class="email-input" type="text" autocomplete="off" value="" name="user[jarak]" aria-required="true" placeholder="Jarak" />
+                                        <input id="telepon" class="email-input" type="text" autocomplete="off" value="0" name="user[jarak]" aria-required="true" placeholder="Jarak" />
                                     </div>
                                 </div>
                                 <div class="prompt barang">
@@ -54,7 +55,8 @@
                                         <input id="alamat" class="email-input" type="text" autocomplete="off" value="" name="user[barang]" aria-required="true" placeholder="Barang" />
                                     </div>
                                 </div>
-                                <div class="score"><span><b class="fill"></b></span></div>
+                                <div class="score"><span><b class="fill">
+                                        </b></span></div>
                             </div>
                             <input type="hidden" name="ad_ref" value="">
                             <div class="doit">

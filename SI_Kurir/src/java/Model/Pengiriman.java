@@ -26,6 +26,8 @@ public class Pengiriman {
     private double jarak;
     private String barang;
     private double biaya;
+    private boolean status;
+
 
     public String getID_pelanggan() {
         return ID_pelanggan;
@@ -93,9 +95,18 @@ public class Pengiriman {
 
     public double Biaya(double jarak) {
         double harga = 0;
+        harga=jarak*3000;
         return harga;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
     public static void tambahPengiriman(Pengiriman p) {
         String text = null;
         Connection conn = null;
@@ -103,7 +114,7 @@ public class Pengiriman {
         conn = DatabaseManager.getDBConnection();
         try {
             ps = conn.prepareCall("INSERT INTO PTI_PEMESANAN VALUES"
-                    + "(?,?,?,?,?,?,?)");
+                    + "(?,?,?,?,?,?,?,0)");
             ps.setString(1, p.getID_pelanggan());
             ps.setString(2, p.getID_kurir());
             ps.setString(3, p.getTanggal());
@@ -147,7 +158,7 @@ public class Pengiriman {
             }
         }
     }
-    public static Pengiriman[] getListStatusTagihan(String id) {
+    public static Pengiriman[] getListPengiriman(String time) {
         Connection conn = null;
         Statement st = null;
         ResultSet rs = null;
@@ -156,11 +167,11 @@ public class Pengiriman {
         try {
             st = conn.createStatement();
             rs = st.executeQuery("SELECT COUNT (*) "
-                    + "TOTAL FROM PEMESANAN WHERE ID = '" + id + "' ORDER BY TANGGAL ASC");
+                    + "TOTAL FROM PEMESANAN WHERE TANGGAL = '%" + time + "%' ORDER BY TANGGAL ASC");
             rs.next();
             po = new Pengiriman[rs.getInt(1)];
             rs = st.executeQuery("SELECT *"
-                    + "FROM PTI_PEMESANAN WHERE ID = '" + id + "' ORDER BY TANGGAL ASC");
+                    + "FROM PTI_PEMESANAN WHERE TANGGAL = '%" + time + "%' ORDER BY TANGGAL ASC");
             int index = 0;
             while (rs.next()) {
                 po[index] = new Pengiriman();
@@ -185,5 +196,31 @@ public class Pengiriman {
             }
         }
         return po;
+    }
+    public static String ubahStatus(Pengiriman p){
+        String text = null;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        try {
+            ps = conn.prepareCall("UPDATE PTI_PELANGGAN SET"
+                    + " STATUS=1 WHERE ID=? AND TANGGAL=?");
+            ps.setString(1, p.getID_pelanggan());
+            ps.setString(2, p.getTanggal());
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+
+        } finally {
+            try {
+                ps.close();
+                conn.close();
+            } catch (SQLException ex) {
+
+            }
+        }
+        return text;
     }
 }
