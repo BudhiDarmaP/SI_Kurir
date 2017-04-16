@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controller;
 
+import Model.Kurir;
 import Model.Pelanggan;
 import Model.Pengiriman;
 import java.io.IOException;
@@ -20,11 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * @author budhidarmap
  */
-@WebServlet(name = "ControlSimpanPesanan", urlPatterns = {"/ControlSimpanPesanan"})
-public class ControlSimpanPesanan extends HttpServlet {
+@WebServlet(name = "ControlPengiriman", urlPatterns = {"/ControlPengiriman"})
+public class ControlPengiriman extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,45 +35,35 @@ public class ControlSimpanPesanan extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        //deklarasi string
+        //deklarasi
+        String pesanan=request.getParameter("id");
         String email=null;
         String password=null;
-        String id=null;
-        String timeStamp = new SimpleDateFormat("dd-MMM-yyyy hh:mm").format(Calendar.getInstance().getTime());
-        //Panggil Cookies
+        Pengiriman p =Pengiriman.panggilPesanan(pesanan);
+        //panggil cookies
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
                 Cookie c = cookies[i];
                 //cek nilai
-                if (c.getName().equals("pesanan")) {
-                    id=c.getValue();
-                }
                 if (c.getName().equals("email")) {
                     email=c.getValue();
                 }
                 if (c.getName().equals("pass")) {
                     password=c.getValue();
+                } else {
+                    c = null;
+                    cookies = null;
+                    // Get an array of Cookies associated with this domain
+                    cookies = request.getCookies();
                 }
             }
-            
-            //deklarasi model
-            Pelanggan x = Pelanggan.panggilPelanggan(email, password);
-            Pengiriman p = Pengiriman.panggilPesanan(id);
-            x.getID();
-            p.getID();
-            
-            //keputusan data
-            if (request.getParameter("tombol")=="Batal") {
-            p.hapusPengiriman(p.getID(), x.getID());
-            this.rollBack(request, response, x.getNama());
-            }
-            
-            else{
-            String pesan=
-                    "<form action=formPemesanan.jsp><table>\n" +
+        }
+        //panggil inputan
+        Kurir x = Kurir.panggilKurir(email, password);
+        String pesan=
+                    "<form action=listPemesanan.jsp><table>\n" +
                     "<td>ID\n <td>:"+p.getID()+
-                    "<tr><td>Tanggal\n <td>:"+timeStamp+
                     "<tr><td>Asal\n <td>:"+p.getAsal()+
                     "<tr><td>Tujuan\n <td>:"+p.getTujuan()+
                     "<tr><td>Jarak\n <td>:"+p.getJarak()+
@@ -86,29 +71,20 @@ public class ControlSimpanPesanan extends HttpServlet {
                     "<tr><td>Biaya:\n <td>:"+p.getBiaya()+
                     "</table>"
                     + "<input type=\"submit\" value=\"Home\"></form>";
-            this.tampil(request, response, "<p>Pesanan telah diterbitkan</p>"+pesan, x.getNama());
-            }
-        }
+        p.setID_kurir(x.getID());
+        p.ubahStatus(p);
+        this.tampil(request, response, "Your duty to serve this"+pesan);
     }
 
-        @Override
-        public String getServletInfo
-        
-            () {
+    @Override
+    public String getServletInfo() {
         return "Short description";
-        }// </editor-fold>
+    }// </editor-fold>
 
-    public void tampil(HttpServletRequest request, HttpServletResponse response, String information, String nama) throws ServletException, IOException {
+    public void tampil(HttpServletRequest request, HttpServletResponse response, String information) throws ServletException, IOException {
         RequestDispatcher dispatcher;
         request.setAttribute("info", information);
-        request.setAttribute("nama", nama);
-        dispatcher = request.getRequestDispatcher("info.jsp");
-        dispatcher.forward(request, response);
-    }
-    public void rollBack(HttpServletRequest request, HttpServletResponse response, String information) throws ServletException, IOException {
-        RequestDispatcher dispatcher;
-        request.setAttribute("info", information);
-        dispatcher = request.getRequestDispatcher("formPemesanan.jsp");
+        dispatcher = request.getRequestDispatcher("info_kurir.jsp");
         dispatcher.forward(request, response);
     }
 }

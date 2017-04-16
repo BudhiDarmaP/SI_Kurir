@@ -11,14 +11,15 @@ import Model.Pelanggan;
  *
  * @author budhidarmap
  */
-public class testEditMember {
+public class tesPanggilPelanggan {
     public static void main(String[] args) {
         Pelanggan p = new Pelanggan();
-        p.setID("240317001");
-        p.setNama("Peri Khayangan");
-        p.setEmail("mimiperi@perikhayangan.hvn");
-        p.setNo_tlp("00000000000");
-        p.setAlamat("Langit Ke 7");
-        p.editMember(p);
+        p = p.panggilPelanggan("mimiperi@perikhayangan.hvn", "123");
+        System.out.println(p.getID());
+        System.out.println(p.getNama());
+        System.out.println(p.getEmail());
+        System.out.println(p.getNo_tlp());
+        System.out.println(p.getAlamat());
+        System.out.println(p.getPassword());
     }
 }

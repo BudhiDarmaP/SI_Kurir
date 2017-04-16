@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UnitPelanggan;
+package UnitKurir;
 
-import Model.Pelanggan;
+import UnitPelanggan.*;
+import Model.Kurir;
 
 /**
  *
  * @author budhidarmap
  */
-public class tesPanggilMember {
+public class tesHapusKurir {
     public static void main(String[] args) {
-        Pelanggan p = Pelanggan.panggilMember("mimiperi@perikhayangan.hvn", "123");
-        System.out.println(p.getID());
+        new Kurir().hapusMember("aku@email.id");
     }
 }

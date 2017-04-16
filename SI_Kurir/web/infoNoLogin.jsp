@@ -1,4 +1,3 @@
-<%@page import="Model.Pelanggan"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
 <!--
@@ -7,28 +6,6 @@
         Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-    <%
-        //deklarasi string
-        String email=null;
-        String password=null;
-        //Panggil Cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                Cookie c = cookies[i];
-                //cek nilai
-                if (c.getName().equals("email")) {
-                    email=c.getValue();
-                }
-                if (c.getName().equals("pass")) {
-                    password=c.getValue();
-                }
-            }
-        }
-        //set attribute
-        Pelanggan p = Pelanggan.panggilPelanggan(email, password);
-        request.setAttribute("info", p.getNama());
-    %>
     <head>
         <title>Kurirmu.id</title>
         <meta charset="utf-8" />
@@ -54,7 +31,7 @@
                     <div class="inner">
 
                         <h2>Informasi:</h2>
-                        <h3><%= request.getAttribute("info")%></h3>
+                        <h3><%= request.getAttribute("info")%>!</h3>
 
                     </div>
                 </section>
@@ -70,7 +47,7 @@
                 </ul>
                 <ul class="copyright">
                     <li>&copy; Sanata Dharma University.</li><li>Credits: <a href="http://budhidarmap.github.io">@budhidarmap</a></li>
-                    <li>Want Check? <a role="button" href="CheckPesanan.jsp"/>Check</a>, Want Send? <a role="button" href="formPemesanan.jsp"/>Send</a></li>
+                    <li>Want Send? <a role="button" href="index.jsp"/>Member</a>, Want Serve? <a role="button" href="kurirLogin.jsp"/>Kurir</a></li>
                 </ul>
             </footer>
 

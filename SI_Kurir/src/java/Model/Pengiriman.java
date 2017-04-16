@@ -18,6 +18,7 @@ import java.sql.Statement;
  */
 public class Pengiriman {
 
+    private String ID;
     private String ID_pelanggan;
     private String ID_kurir;
     private String tanggal;
@@ -28,6 +29,13 @@ public class Pengiriman {
     private double biaya;
     private boolean status;
 
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
 
     public String getID_pelanggan() {
         return ID_pelanggan;
@@ -106,7 +114,6 @@ public class Pengiriman {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    
     public static void tambahPengiriman(Pengiriman p) {
         String text = null;
         Connection conn = null;
@@ -114,14 +121,15 @@ public class Pengiriman {
         conn = DatabaseManager.getDBConnection();
         try {
             ps = conn.prepareCall("INSERT INTO PTI_PEMESANAN VALUES"
-                    + "(?,?,?,?,?,?,?,0)");
+                 +"(?,NULL,TO_DATE(?, 'DD-MM-YYYY'),?,?,?,?,?,'0',?)");
             ps.setString(1, p.getID_pelanggan());
-            ps.setString(2, p.getID_kurir());
-            ps.setString(3, p.getTanggal());
-            ps.setString(4, p.getAsal());
-            ps.setString(5, p.getTujuan());
+            ps.setString(2, p.getTanggal());
+            ps.setString(3, p.getAsal());
+            ps.setString(4, p.getTujuan());
+            ps.setDouble(5, p.getJarak());
             ps.setString(6, p.getBarang());
             ps.setDouble(7, p.getBiaya());
+            ps.setString(8, p.getID());
             ps.executeUpdate();
             conn.commit();
             text = "Data sudah ditambahkan";
@@ -132,19 +140,126 @@ public class Pengiriman {
                 ps.close();
                 conn.close();
             } catch (SQLException ex) {
+                System.out.println("Gagal Menambahkan");
             }
         }
+            System.out.println(text);
+    }
+    
+     public static Pengiriman panggilPemesanan(String member, String time){
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        int index = 0;
+        Pengiriman p = new Pengiriman();
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT * FROM PTI_PEMESANAN "
+                    + "WHERE ID_MEMBER='"+member+"' AND TANGGAL=TO_DATE"
+                    + "('" + time + "','DD-MM-YYYY') AND STATUS='0'");
+            while (rs.next()) {
+                p.setID_pelanggan(member);
+                p.setID_kurir(rs.getString(2));
+                p.setTanggal(rs.getString(3));
+                p.setAsal(rs.getString(4));
+                p.setTujuan(rs.getString(5));
+                p.setJarak(rs.getDouble(6));
+                p.setBarang(rs.getString(7));
+                p.setBiaya(rs.getDouble(8));
+                p.setID(rs.getString(10));
+                index++;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return p;
+    }
+     public static Pengiriman panggilPesanan(String id){
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        int index = 0;
+        Pengiriman p = new Pengiriman();
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT * FROM PTI_PEMESANAN "
+                    + "WHERE ID='"+id+"' AND STATUS='0'");
+            while (rs.next()) {
+                p.setID_pelanggan(rs.getString(1));
+                p.setID_kurir(rs.getString(2));
+                p.setTanggal(rs.getString(3));
+                p.setAsal(rs.getString(4));
+                p.setTujuan(rs.getString(5));
+                p.setJarak(rs.getDouble(6));
+                p.setBarang(rs.getString(7));
+                p.setBiaya(rs.getDouble(8));
+                p.setID(id);
+                index++;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return p;
+    }
+     
+    public static String editPengiriman(Pengiriman p) {
+        String text = null;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        try {
+            ps = conn.prepareCall("UPDATE PTI_PEMESANAN SET " 
+                    +"ASAL=?, TUJUAN=?, JARAK=?, BARANG=?, BIAYA=? "
+                    +"WHERE ID=? AND ID_MEMBER=?");
+            ps.setString(1, p.getAsal());
+            ps.setString(2, p.getTujuan());
+            ps.setDouble(3, p.getJarak());
+            ps.setString(4, p.getBarang());
+            ps.setDouble(5, p.getBiaya());
+            ps.setString(6, p.getID());
+            ps.setString(7, p.getID_pelanggan());
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+        } finally {
+            try {
+                ps.close();
+                conn.close();
+            } catch (SQLException ex) {
+
+            }
+        }
+        return text;
     }
 
-    public static void hapusPengiriman(String ID, String Kurir, String Tanggal) {
+    public static void hapusPengiriman(String ID, String Pelanggan) {
         String text = null;
         Connection conn = null;
         PreparedStatement ps = null;
         conn = DatabaseManager.getDBConnection();
         try {
             ps = conn.prepareCall("DELETE FROM PTI_PEMESANAN "
-                    + "WHERE ID='" + ID + "' AND KURIR='"+Kurir+"'"
-                    + "AND TANGGAL='"+Tanggal+"'");
+                    + "WHERE ID='" + ID + "' AND ID_MEMBER='"+Pelanggan+"'");
             ps.executeUpdate();
             conn.commit();
             text = "Data sudah dihapus";
@@ -157,7 +272,9 @@ public class Pengiriman {
             } catch (SQLException ex) {
             }
         }
+        System.out.println(text);
     }
+    
     public static Pengiriman[] getListPengiriman(String time) {
         Connection conn = null;
         Statement st = null;
@@ -167,11 +284,15 @@ public class Pengiriman {
         try {
             st = conn.createStatement();
             rs = st.executeQuery("SELECT COUNT (*) "
-                    + "TOTAL FROM PEMESANAN WHERE TANGGAL = '%" + time + "%' ORDER BY TANGGAL ASC");
+                    + "TOTAL FROM PTI_PEMESANAN WHERE TANGGAL=TO_DATE"
+                    + "('" + time + "','DD-MM-YYYY') "
+                    + "AND STATUS='0' ORDER BY TANGGAL ASC");
             rs.next();
             po = new Pengiriman[rs.getInt(1)];
             rs = st.executeQuery("SELECT *"
-                    + "FROM PTI_PEMESANAN WHERE TANGGAL = '%" + time + "%' ORDER BY TANGGAL ASC");
+                    + "FROM PTI_PEMESANAN WHERE TANGGAL=TO_DATE"
+                    + "('" + time + "','DD-MM-YYYY') "
+                    + "AND STATUS='0' ORDER BY TANGGAL ASC");
             int index = 0;
             while (rs.next()) {
                 po[index] = new Pengiriman();
@@ -180,8 +301,11 @@ public class Pengiriman {
                 po[index].setTanggal(rs.getString(3));
                 po[index].setAsal(rs.getString(4));
                 po[index].setTujuan(rs.getString(5));
-                po[index].setBarang(rs.getString(6));
-                po[index].setBiaya(rs.getDouble(7));
+                po[index].setJarak(rs.getDouble(6));
+                po[index].setBarang(rs.getString(7));
+                po[index].setBiaya(rs.getDouble(8));
+                po[index].setStatus(rs.getBoolean(9));
+                po[index].setID(rs.getString(10));
                 index++;
             }
         } catch (SQLException ex) {
@@ -205,10 +329,10 @@ public class Pengiriman {
         ResultSet rs = null;
         conn = DatabaseManager.getDBConnection();
         try {
-            ps = conn.prepareCall("UPDATE PTI_PELANGGAN SET"
-                    + " STATUS=1 WHERE ID=? AND TANGGAL=?");
-            ps.setString(1, p.getID_pelanggan());
-            ps.setString(2, p.getTanggal());
+            ps = conn.prepareCall("UPDATE PTI_PEMESANAN SET"
+                    + " STATUS=1, ID_KURIR=? WHERE ID=?");
+            ps.setString(1, p.getID_kurir());
+            ps.setString(2, p.getID());
             ps.executeUpdate();
             conn.commit();
         } catch (SQLException ex) {

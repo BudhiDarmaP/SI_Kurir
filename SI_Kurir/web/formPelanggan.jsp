@@ -22,51 +22,67 @@
         <header id="header">
             <a href="index.jsp"><h1>Kurirmu.id</h1></a>
             <h2>Pendaftaran</h2>
+            <%if (request.getAttribute("error") != null) {%>
+            <h7><font color="red"><%=request.getAttribute("error")%></font></h7>
+            <%}%>
             <p>Pengisian form pelanggan menggunakan data sebenarnya</p>
         </header>
 
         <!-- Signup Form -->
         <form id="registation-form" method="post" action="ControlDaftarPelanggan">
             <div class="textbox">
+
                 <div class="prompt name">
                     <div class="field" data-fieldname="name">
+                        <div class="sidetip">
+                        </div>
                         <input id="full-name" type="text" autocomplete="off" value="" name="user[name]" maxlength="20" aria-required="true" placeholder="Full name" />
                     </div>
                 </div>
 
                 <div class="prompt email">
                     <div class="field" data-fieldname="email">
-                        <input id="email" class="email-input" type="email" autocomplete="off" value="" name="user[email]" aria-required="true" placeholder="Email" />
+                        <div class="sidetip">
+                        </div>
+                        <input id="email" class="email-input" type="text" autocomplete="off" value="" name="user[email]" aria-required="true" placeholder="Email" />
                     </div>
                 </div>
-                
+
                 <div class="prompt email">
                     <div class="field" data-fieldname="No Telepon">
+                        <div class="sidetip">
+                        </div>
                         <input id="telepon" class="email-input" type="text" autocomplete="off" value="" name="user[tlp]" aria-required="true" placeholder="No Telepon" />
                     </div>
                 </div>
-                
+
                 <div class="prompt email">
                     <div class="field" data-fieldname="Alamat">
+                        <div class="sidetip">
+                        </div>
                         <input id="alamat" class="email-input" type="text" autocomplete="off" value="" name="user[address]" aria-required="true" placeholder="Address" />
                     </div>
                 </div>
-                
+
                 <div class="prompt password">
                     <div class="field" data-fieldname="password">
-                        <input id="password" type="password" value="" name="user[password]" aria-required="true" placeholder="Password" />
+                        <div class="sidetip">
+                        </div>
+                        <input id="password" type="password" value="" name="user[pass]" aria-required="true" placeholder="Password" />
                     </div>
                     <div class="score"><span><b class="fill"></b></span></div>
                 </div>
 
                 <div class="prompt optin">
                     <label class="t1-label">
-                        <input type="checkbox"  name="user[use_cookie_personalization]"  value="0"/>
+                        <input type="checkbox"  name="user[use_cookie_personalization]" value="0"/>
                         <span>Saya dapat bertanggung jawab atas semua data diatas.</span>
                     </label>
                 </div>
+
                 <input type="hidden" name="ad_ref" value="">
             </div>
+
             <div class="doit">
                 <div class="sign-up-box">
                     <input class="submit button signup"
@@ -79,6 +95,7 @@
 
         <!-- Footer -->
         <footer id="footer">
+            <ul>Want to serve as porter? <a role="button" href="kurirLogin.jsp"/>Serve</a>, Want to send? <a role="button" href="index.jsp"/>Login</a></ul>
             <ul class="icons">
                 <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
                 <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
@@ -87,7 +104,6 @@
             </ul>
             <ul class="copyright">
                 <li>&copy; Sanata Dharma University.</li><li>Credits: <a href="http://budhidarmap.github.io">@budhidarmap</a></li>
-                <li>Want to serve as porter? <a role="button" href="kurirLogin.jsp"/>Login</a> or <a role="button" href="formKurir.jsp"/>Daftar</a></li>
             </ul>
         </footer>
 

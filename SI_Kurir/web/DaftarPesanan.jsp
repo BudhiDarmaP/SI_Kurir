@@ -4,18 +4,18 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
 <%
-  String timeStamp = new SimpleDateFormat("yyMMdd").format(Calendar.getInstance().getTime());
-  Pengiriman p[]=Pengiriman.getListPengiriman(timeStamp);
-  
-  for(int i=0; i> p.length ; i++){
-     p[i].getID_pelanggan();
-     p[i].getTanggal();
-     p[i].getAsal();
-     p[i].getTujuan();
-     p[i].getJarak();
-     p[i].getBarang();
-     p[i].getBiaya();
-  }
+    String timeStamp = new SimpleDateFormat("yyMMdd").format(Calendar.getInstance().getTime());
+    Pengiriman p[] = Pengiriman.getListPengiriman(timeStamp);
+
+    for (int i = 0; i > p.length; i++) {
+        p[i].getID_pelanggan();
+        p[i].getTanggal();
+        p[i].getAsal();
+        p[i].getTujuan();
+        p[i].getJarak();
+        p[i].getBarang();
+        p[i].getBiaya();
+    }
 %>
 <html>
     <head>
@@ -97,6 +97,7 @@
 
             <!-- Footer -->
             <footer id="footer">
+                <ul>Want Send? <a role="button" href="kurirLogin.jsp"/>Member</a>, Want Serve? <a role="button" href="kurirLogin.jsp"/>Kurir</a></ul>
                 <ul class="icons">
                     <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
                     <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
@@ -105,7 +106,6 @@
                 </ul>
                 <ul class="copyright">
                     <li>&copy; Sanata Dharma University.</li><li>Credits: <a href="http://budhidarmap.github.io">@budhidarmap</a></li>
-                    <li>Want Send? <a role="button" href="kurirLogin.jsp"/>Member</a>, Want Serve? <a role="button" href="kurirLogin.jsp"/>Kurir</a></li>
                 </ul>
             </footer>
 

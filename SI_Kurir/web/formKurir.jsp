@@ -22,6 +22,9 @@
         <header id="header">
             <a href="index.jsp"><h1>Kurirmu.id</h1></a>
             <h2>Pendaftaran</h2>
+            <%if (request.getAttribute("error") != null) {%>
+            <h7><font color="red"><%=request.getAttribute("error")%></font></h7>
+            <%}%>
             <p>Pengisian form kurir menggunakan data sebenarnya</p>
         </header>
 
@@ -65,7 +68,7 @@
                     <div class="field" data-fieldname="password">
                         <div class="sidetip">
                         </div>
-                        <input id="password" type="password" value="" name="user[user_password]" aria-required="true" placeholder="Password" />
+                        <input id="password" type="password" value="" name="user[password]" aria-required="true" placeholder="Password" />
                     </div>
                     <div class="score"><span><b class="fill"></b></span></div>
                 </div>
@@ -85,17 +88,15 @@
                     <input class="submit button signup"
                            type="submit"
                            id="submit_button"
-                           value=
-                           "Sign up"
-
-                           >
+                           value="Sign up">
                 </div>
             </div>
-
         </form>
 
         <!-- Footer -->
         <footer id="footer">
+            <ul>Want to send something? <a role="button" href="index.jsp"/>Send</a></ul>, Want to serve? 
+            <a role="button" href="kurirLogin.jsp">Login</a>
             <ul class="icons">
                 <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
                 <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
@@ -104,7 +105,6 @@
             </ul>
             <ul class="copyright">
                 <li>&copy; Sanata Dharma University.</li><li>Credits: <a href="http://budhidarmap.github.io">@budhidarmap</a></li>
-                <li>Want to serve as porter? <a role="button" href="kurirLogin.jsp"/>Login</a></li>
             </ul>
         </footer>
 

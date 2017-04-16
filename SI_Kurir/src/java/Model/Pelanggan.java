@@ -101,6 +101,61 @@ public class Pelanggan {
         }
         return index;
     }
+    public static boolean LoginPelanggan(String email, String pass) {
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        Pelanggan p = new Pelanggan();
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT COUNT (*) FROM PTI_PELANGGAN WHERE "
+                    + "EMAIL='" + email + "' AND PASSWORD='" + pass + "'");
+            rs.next();
+            int nilai = Integer.parseInt(rs.getString(1));
+            if (nilai==0) {
+                return false;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return true;
+    }
+    public static int cekPelanggan(String email) {
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        int cek = 0;
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT COUNT (*) FROM PTI_PELANGGAN WHERE "
+                    + "EMAIL='" + email + "'");
+            rs.next();
+            cek = Integer.parseInt(rs.getString(1));
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return cek;
+    }
+    
     public static void tambahMember(Pelanggan p){
         String text = null;
         Connection conn = null;
@@ -108,12 +163,13 @@ public class Pelanggan {
         conn = DatabaseManager.getDBConnection();
         try {
             ps = conn.prepareCall("INSERT INTO PTI_PELANGGAN VALUES"
-                    + "(?,?,?,?,?)");
+                    + "(?,?,?,?,?,?)");
             ps.setString(1, p.getID());
             ps.setString(2, p.getNama());
             ps.setString(3, p.getEmail());
             ps.setString(4, p.getNo_tlp());
             ps.setString(5, p.getAlamat());
+            ps.setString(6, p.getPassword());
             ps.executeUpdate();
             conn.commit();
             text = "Data sudah ditambahkan";
@@ -178,7 +234,7 @@ public class Pelanggan {
         }
         return text;
     }
-    public static Pelanggan panggilMember(String email, String password){
+    public static Pelanggan panggilPelanggan(String email, String password){
         Connection conn = null;
         Statement st = null;
         ResultSet rs = null;
@@ -186,8 +242,6 @@ public class Pelanggan {
         Pelanggan p = new Pelanggan();
         try {
             st = conn.createStatement();
-            rs = st.executeQuery("SELECT * FROM PTI_PELANGGAN");
-            rs.next();
             rs = st.executeQuery("SELECT ID, NAMA, NO_TLP, ALAMAT FROM PTI_PELANGGAN "
                     + "WHERE EMAIL='"+email+"' AND PASSWORD='"+password+"'");
             int index = 0;

@@ -71,19 +71,106 @@ public class Kurir {
     public void setAlamat(String alamat) {
         this.alamat = alamat;
     }
+    
+    public static int panggilID(String tgl){
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        int index = 0;
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT COUNT (ID) FROM PTI_KURIR WHERE"
+                    + "(ID LIKE '%"+tgl+"%')");
+            rs.next();
+            rs = st.executeQuery("SELECT ID FROM PTI_KURIR WHERE"
+                    + "(ID LIKE '%"+tgl+"%')");
+            while (rs.next()) {
+                index++;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return index;
+    }
+    
+    public static boolean LoginKurir(String email, String pass) {
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        Pelanggan p = new Pelanggan();
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT COUNT (*) FROM PTI_KURIR WHERE "
+                    + "EMAIL='" + email + "' AND PASSWORD='" + pass + "'");
+            rs.next();
+            int nilai = Integer.parseInt(rs.getString(1));
+            if (nilai==0) {
+                return false;
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return true;
+    }
+    
+    public static int cekKurir(String email) {
+        Connection conn = null;
+        Statement st = null;
+        ResultSet rs = null;
+        conn = DatabaseManager.getDBConnection();
+        int cek = 0;
+        try {
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT COUNT (*) FROM PTI_KURIR WHERE "
+                    + "EMAIL='" + email + "'");
+            rs.next();
+            cek = Integer.parseInt(rs.getString(1));
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return cek;
+    }
+    
     public static void tambahKurir(Kurir k){
         String text = null;
         Connection conn = null;
         PreparedStatement ps = null;
         conn = DatabaseManager.getDBConnection();
         try {
-            ps = conn.prepareCall("INSERT INTO PTI_KURIR VALUES"
-                    + "(?,?,?,?,?)");
+            ps = conn.prepareCall("INSERT INTO PTI_KURIR VALUES(?,?,?,?,?,?)");
             ps.setString(1, k.getID());
             ps.setString(2, k.getNama());
             ps.setString(3, k.getEmail());
             ps.setString(4, k.getNo_tlp());
-            ps.setString(5, k.getNo_tlp());
+            ps.setString(5, k.getAlamat());
+            ps.setString(6, k.getPassword());
             ps.executeUpdate();
             conn.commit();
             text = "Data sudah ditambahkan";
@@ -97,6 +184,7 @@ public class Kurir {
             }
         }
     }
+    
     public static void hapusMember(String email){
         String text = null;
         Connection conn = null;
@@ -127,11 +215,13 @@ public class Kurir {
         conn = DatabaseManager.getDBConnection();
         try {
             ps = conn.prepareCall("UPDATE PTI_KURIR SET"
-                    + "(NAMA, EMAIL, NO_TLP, ALAMAT) VALUES(?,?,?,?,?)");
+                    + " NAMA=?, EMAIL=?, NO_TLP=?, ALAMAT=? "
+                    + "WHERE ID=?");
             ps.setString(1, k.getNama());
             ps.setString(2, k.getEmail());
             ps.setString(3, k.getNo_tlp());
             ps.setString(4, k.getAlamat());
+            ps.setString(5, k.getID());
             ps.executeUpdate();
             conn.commit();
         } catch (SQLException ex) {
@@ -154,9 +244,7 @@ public class Kurir {
         Kurir k = new Kurir();
         try {
             st = conn.createStatement();
-            rs = st.executeQuery("SELECT * FROM PTI_KURIR");
-            rs.next();
-            rs = st.executeQuery("SELECT ID, NAMA, NO_TLP, ALAMAT FROM PTI_KURIR"
+            rs = st.executeQuery("SELECT ID, NAMA, NO_TLP, ALAMAT FROM PTI_KURIR "
                     + "WHERE EMAIL='"+email+"' AND PASSWORD='"+password+"'");
             int index = 0;
             while (rs.next()) {

@@ -1,4 +1,4 @@
-<%@page import="Model.Pelanggan"%>
+<%@page import="Model.Kurir"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
 <!--
@@ -8,26 +8,29 @@
 -->
 <html>
     <%
-        //deklarasi string
-        String email=null;
-        String password=null;
-        //Panggil Cookies
+        String email = null;
+        String password = null;
+        //panggil cookies
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
                 Cookie c = cookies[i];
                 //cek nilai
                 if (c.getName().equals("email")) {
-                    email=c.getValue();
+                    email = c.getValue();
                 }
                 if (c.getName().equals("pass")) {
-                    password=c.getValue();
+                    password = c.getValue();
+                } else {
+                    c = null;
+                    cookies = null;
+                    // Get an array of Cookies associated with this domain
+                    cookies = request.getCookies();
                 }
             }
         }
-        //set attribute
-        Pelanggan p = Pelanggan.panggilPelanggan(email, password);
-        request.setAttribute("info", p.getNama());
+        Kurir x = Kurir.panggilKurir(email, password);
+        request.setAttribute("info", x.getNama());
     %>
     <head>
         <title>Kurirmu.id</title>
@@ -70,7 +73,7 @@
                 </ul>
                 <ul class="copyright">
                     <li>&copy; Sanata Dharma University.</li><li>Credits: <a href="http://budhidarmap.github.io">@budhidarmap</a></li>
-                    <li>Want Check? <a role="button" href="CheckPesanan.jsp"/>Check</a>, Want Send? <a role="button" href="formPemesanan.jsp"/>Send</a></li>
+                    <li>Want Check? <a role="button" href="listPemesanan.jsp"/>Check</a>, Want Logout? <a role="button" href="KurirLogout.jsp"/>Logout</a></li>
                 </ul>
             </footer>
 

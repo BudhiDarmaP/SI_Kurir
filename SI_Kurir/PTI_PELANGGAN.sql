@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Saturday-March-25-2017   
+--  File created - Wednesday-April-12-2017   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table PTI_PELANGGAN
@@ -20,6 +20,7 @@
 REM INSERTING into SIA.PTI_PELANGGAN
 SET DEFINE OFF;
 Insert into SIA.PTI_PELANGGAN (ID,NAMA,EMAIL,NO_TLP,ALAMAT,PASSWORD) values ('240317001','Peri Khayangan','mimiperi@perikhayangan.hvn','00000000000','Langit Ke 7','123');
+Insert into SIA.PTI_PELANGGAN (ID,NAMA,EMAIL,NO_TLP,ALAMAT,PASSWORD) values ('170407001','Budhi Darma P','email@email.id','081239229537','Paingan','123');
 --------------------------------------------------------
 --  DDL for Index PTI_PELANGGAN_PK
 --------------------------------------------------------

@@ -9,6 +9,7 @@ import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,11 +38,37 @@ public class ControlPemesanan extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         try (PrintWriter out = response.getWriter()) {
+            //deklarasi
             Pengiriman p = new Pengiriman();
-            String timeStamp = new SimpleDateFormat("yyMMdd").format(Calendar.getInstance().getTime());
-            //membuat data
-            p.setID_pelanggan(request.getParameter("user[id]"));
-            p.setID_kurir(request.getParameter(null));
+            String timeStamp = new SimpleDateFormat("ddMMyyyy").format(Calendar.getInstance().getTime());
+            String email = null;
+            String password = null;
+            //panggil cookies
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (int i = 0; i < cookies.length; i++) {
+                    Cookie c = cookies[i];
+                    //cek nilai
+                    if (c.getName().equals("email")) {
+                        email = c.getValue();
+                    }
+                    if (c.getName().equals("pass")) {
+                        password = c.getValue();
+                    }
+                }
+            }
+            //panggil pelanggan
+            Pelanggan x = Pelanggan.panggilPelanggan(email, password);
+            //execption
+            if (!request.getParameter("user[jarak]").contains("[0-9]+")) {
+                RequestDispatcher dispatcher;
+                request.setAttribute("error", "Format jarak salah!");
+                request.setAttribute("info", x.getNama());
+                dispatcher = request.getRequestDispatcher("formPemesanan.jsp");
+                dispatcher.forward(request, response);
+            }
+            //panggil inputan
+            p.setID_pelanggan(x.getID());
             p.setTanggal(timeStamp);
             p.setAsal(request.getParameter("user[asal]"));
             p.setTujuan(request.getParameter("user[tujuan]"));
@@ -49,15 +76,13 @@ public class ControlPemesanan extends HttpServlet {
             p.setBarang(request.getParameter("user[barang]"));
             //biaya
             p.setBiaya(p.Biaya(Double.parseDouble(request.getParameter("user[jarak]"))));
-            //menyimpan data
-            this.tampil(request, response, " <table id='customers'>"
-                    + "<tr><td>Tanggal<input type='text' name='user[tgl]' value='"+p.getTanggal()+"' />"
-                    + "<tr><td>Asal<input type='text' name='user[asal]' value='"+p.getAsal()+"' />"
-                    + "<tr><td>Tujuan<input type='text' name='user[tujuan]' value='"+p.getTujuan()+"' />"
-                    + "<tr><td>Jarak<input type='text' name='user[jarak]' value='"+p.getJarak()+"' />"
-                    + "<tr><td>Barang<input type='text' name='user[barang]' value='"+p.getBarang()+"' />"
-                    + "<tr><td>Biaya<input type='text' name='user[biaya]' value='"+p.getBiaya()+"' />"
-                    + "</table>");
+            p.setID(timeStamp + x.getID());
+            //cookies
+            Cookie Pesanan = new Cookie("pesanan", p.getID());;
+            response.addCookie(Pesanan);
+            //simpan pengiriman
+            p.tambahPengiriman(p);
+            this.tampil(request, response, p.getID());
         }
     }
 

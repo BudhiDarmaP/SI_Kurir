@@ -24,7 +24,8 @@
 
             <!-- Header -->
             <header id="header">
-                <a href="index.jsp"><h1>Kurirmu.id</h1></a>
+                <h1>Kurirmu.id</h1>
+                <p>Welcome <%= request.getAttribute("info")%></p>
             </header>
 
             <!-- Main -->
@@ -47,12 +48,12 @@
 
                                 <div class="prompt jarak">
                                     <div class="field" data-fieldname="Jarak">
-                                        <input id="telepon" class="email-input" type="text" autocomplete="off" value="0" name="user[jarak]" aria-required="true" placeholder="Jarak" />
+                                        <input id="telepon" class="email-input" type="text" autocomplete="off" value="" name="user[jarak]" aria-required="true" placeholder="Jarak(Km)" />
                                     </div>
                                 </div>
                                 <div class="prompt barang">
                                     <div class="field" data-fieldname="Barang">
-                                        <input id="alamat" class="email-input" type="text" autocomplete="off" value="" name="user[barang]" aria-required="true" placeholder="Barang" />
+                                        <input id="alamat" class="email-input" type="text" autocomplete="off" value="" name="user[barang]" aria-required="true" placeholder="Jenis Barang" />
                                     </div>
                                 </div>
                                 <div class="score"><span><b class="fill">
@@ -61,12 +62,19 @@
                             <input type="hidden" name="ad_ref" value="">
                             <div class="doit">
                                 <div class="sign-up-box">
-                                    <input class="submit button signup"
+                                    <input class="submit button asal"
                                            type="submit"
                                            id="submit_button"
                                            value="Pesan">
+                                    <input class="submit button reset"
+                                           type="reset"
+                                           id="submit_button"
+                                           value="Reset">
                                 </div>
                             </div>
+                            <%if (request.getAttribute("error") != null) {%>
+                            <h7><font color="red"><%=request.getAttribute("error")%></font></h7>
+                                <%}%>
                         </form>
                     </div>
                 </section>
@@ -75,6 +83,7 @@
 
         <!-- Footer -->
         <footer id="footer">
+            <ul>Check your package? <a role="button" href="CheckPesanan.jsp"/>CHECK</a>, Want Logout? <a role="button" href="PelangganLogout.jsp"/>LOGOUT</a></ul>
             <ul class="icons">
                 <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
                 <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
@@ -83,7 +92,6 @@
             </ul>
             <ul class="copyright">
                 <li>&copy; Sanata Dharma University.</li><li>Credits: <a href="http://budhidarmap.github.io">@budhidarmap</a></li>
-                <li>Want Send? <a role="button" href="kurirLogin.jsp"/>Member</a>, Want Serve? <a role="button" href="kurirLogin.jsp"/>Kurir</a></li>
             </ul>
         </footer>
 

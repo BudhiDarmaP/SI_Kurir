@@ -30,6 +30,9 @@
             <table>
                 <tr><td><input type="email" name="email" id="email" placeholder="Email Address" />
                 <tr><td><input type="password" name="password" id="password" placeholder="Password" />
+                        <% if (request.getAttribute("error") != null) {%>
+                <tr><td><font color="red"><%= request.getAttribute("error")%></font>
+                        <%}%>
                 <tr><td><input type="submit" value="Sign In" />
             </table>
         </form>
