@@ -41,62 +41,43 @@ public class ControlSimpanPesanan extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         //deklarasi string
-        String email=null;
-        String password=null;
-        String id=null;
+        String email = null;
+        String password = null;
+        String id = null;
         String timeStamp = new SimpleDateFormat("dd-MMM-yyyy hh:mm").format(Calendar.getInstance().getTime());
         //Panggil Cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                Cookie c = cookies[i];
-                //cek nilai
-                if (c.getName().equals("pesanan")) {
-                    id=c.getValue();
-                }
-                if (c.getName().equals("email")) {
-                    email=c.getValue();
-                }
-                if (c.getName().equals("pass")) {
-                    password=c.getValue();
-                }
-            }
-            
-            //deklarasi model
-            Pelanggan x = Pelanggan.panggilPelanggan(email, password);
-            Pengiriman p = Pengiriman.panggilPesanan(id);
-            x.getID();
-            p.getID();
-            
-            //keputusan data
-            if (request.getParameter("tombol")=="Batal") {
+        email = CookieUtilities.getCookie(request, "email").getValue();
+        password = CookieUtilities.getCookie(request, "pass").getValue();
+        id = CookieUtilities.getCookie(request, "pesanan").getValue();
+        //deklarasi model
+        Pelanggan x = Pelanggan.panggilPelanggan(email, password);
+        Pengiriman p = Pengiriman.panggilPesanan(id);
+        x.getID();
+        p.getID();
+        //keputusan data
+        if (request.getParameter("tombol") == "Batal") {
             p.hapusPengiriman(p.getID(), x.getID());
             this.rollBack(request, response, x.getNama());
-            }
-            
-            else{
-            String pesan=
-                    "<form action=formPemesanan.jsp><table>\n" +
-                    "<td>ID\n <td>:"+p.getID()+
-                    "<tr><td>Tanggal\n <td>:"+timeStamp+
-                    "<tr><td>Asal\n <td>:"+p.getAsal()+
-                    "<tr><td>Tujuan\n <td>:"+p.getTujuan()+
-                    "<tr><td>Jarak\n <td>:"+p.getJarak()+
-                    "<tr><td>Barang\n <td>:"+p.getBarang()+
-                    "<tr><td>Biaya:\n <td>:"+p.getBiaya()+
-                    "</table>"
+        } else {
+            String pesan
+                    = "<form action=formPemesanan.jsp><table>\n"
+                    + "<td>ID\n <td>:" + p.getID()
+                    + "<tr><td>Tanggal\n <td>:" + timeStamp
+                    + "<tr><td>Asal\n <td>:" + p.getAsal()
+                    + "<tr><td>Tujuan\n <td>:" + p.getTujuan()
+                    + "<tr><td>Jarak\n <td>:" + p.getJarak()
+                    + "<tr><td>Barang\n <td>:" + p.getBarang()
+                    + "<tr><td>Biaya:\n <td>:" + p.getBiaya()
+                    + "</table>"
                     + "<input type=\"submit\" value=\"Home\"></form>";
-            this.tampil(request, response, "<p>Pesanan telah diterbitkan</p>"+pesan, x.getNama());
-            }
+            this.tampil(request, response, "<p>Pesanan telah diterbitkan</p>" + pesan, x.getNama());
         }
     }
 
-        @Override
-        public String getServletInfo
-        
-            () {
+    @Override
+    public String getServletInfo() {
         return "Short description";
-        }// </editor-fold>
+    }// </editor-fold>
 
     public void tampil(HttpServletRequest request, HttpServletResponse response, String information, String nama) throws ServletException, IOException {
         RequestDispatcher dispatcher;
@@ -105,6 +86,7 @@ public class ControlSimpanPesanan extends HttpServlet {
         dispatcher = request.getRequestDispatcher("info.jsp");
         dispatcher.forward(request, response);
     }
+
     public void rollBack(HttpServletRequest request, HttpServletResponse response, String information) throws ServletException, IOException {
         RequestDispatcher dispatcher;
         request.setAttribute("info", information);

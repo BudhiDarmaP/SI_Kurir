@@ -65,7 +65,7 @@
 
         <!-- Footer -->
         <footer id="footer">
-            <ul>Want Check? <a role="button" href="CheckPesanan.jsp.jsp"/>Member</a>, Want Logout? <a role="button" href="PelangganLogout.jsp.jsp"/>Logout</a></ul>
+            <ul>Want Check? <a role="button" href="CheckPesanan.jsp"/>Member</a>, Want Logout? <a role="button" href="PelangganLogout.jsp.jsp"/>Logout</a></ul>
             <ul class="icons">
                 <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
                 <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>

@@ -4,6 +4,7 @@
     Author     : budhidarmap
 --%>
 
+<%@page import="Controller.CookieUtilities"%>
 <%@page import="Model.Pelanggan"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
@@ -17,19 +18,8 @@
         String email = null;
         String password = null;
         //Panggil Cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                Cookie c = cookies[i];
-                //cek nilai
-                if (c.getName().equals("email")) {
-                    email = c.getValue();
-                }
-                if (c.getName().equals("pass")) {
-                    password = c.getValue();
-                }
-            }
-        }
+        Cookie user=CookieUtilities.getCookie(request, "email");
+        Cookie pass=CookieUtilities.getCookie(request, "pass");
             //set attribute
             Pelanggan x = Pelanggan.panggilPelanggan(email, password);
             request.setAttribute("info", x.getNama());

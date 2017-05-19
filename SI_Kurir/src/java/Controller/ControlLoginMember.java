@@ -79,10 +79,10 @@ public class ControlLoginMember extends HttpServlet {
         p = Pelanggan.panggilPelanggan(email, pass);
         String pesan = p.getNama();
         //simpan cookie
-        Cookie EMAIL = new Cookie("email", email);;
+        Cookie EMAIL = new LongLivedCookie("email", email);;
         response.addCookie(EMAIL);
         //cookie id
-        Cookie PASS = new Cookie("pass", pass);;
+        Cookie PASS = new LongLivedCookie("pass", pass);;
         response.addCookie(PASS);
         //lempar
         this.tampil(request, response, pesan);

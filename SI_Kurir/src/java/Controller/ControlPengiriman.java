@@ -41,24 +41,8 @@ public class ControlPengiriman extends HttpServlet {
         String password=null;
         Pengiriman p =Pengiriman.panggilPesanan(pesanan);
         //panggil cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                Cookie c = cookies[i];
-                //cek nilai
-                if (c.getName().equals("email")) {
-                    email=c.getValue();
-                }
-                if (c.getName().equals("pass")) {
-                    password=c.getValue();
-                } else {
-                    c = null;
-                    cookies = null;
-                    // Get an array of Cookies associated with this domain
-                    cookies = request.getCookies();
-                }
-            }
-        }
+        email = CookieUtilities.getCookie(request, "email").getValue();
+        password = CookieUtilities.getCookie(request, "pass").getValue();
         //panggil inputan
         Kurir x = Kurir.panggilKurir(email, password);
         String pesan=

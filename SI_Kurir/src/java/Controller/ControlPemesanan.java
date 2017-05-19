@@ -44,19 +44,8 @@ public class ControlPemesanan extends HttpServlet {
             String email = null;
             String password = null;
             //panggil cookies
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (int i = 0; i < cookies.length; i++) {
-                    Cookie c = cookies[i];
-                    //cek nilai
-                    if (c.getName().equals("email")) {
-                        email = c.getValue();
-                    }
-                    if (c.getName().equals("pass")) {
-                        password = c.getValue();
-                    }
-                }
-            }
+            email=CookieUtilities.getCookie(request, "email").getValue();
+            password=CookieUtilities.getCookie(request, "pass").getValue();
             //panggil pelanggan
             Pelanggan x = Pelanggan.panggilPelanggan(email, password);
             //execption
@@ -66,7 +55,7 @@ public class ControlPemesanan extends HttpServlet {
                 request.setAttribute("info", x.getNama());
                 dispatcher = request.getRequestDispatcher("formPemesanan.jsp");
                 dispatcher.forward(request, response);
-            }
+            }else{
             //panggil inputan
             p.setID_pelanggan(x.getID());
             p.setTanggal(timeStamp);
@@ -78,11 +67,12 @@ public class ControlPemesanan extends HttpServlet {
             p.setBiaya(p.Biaya(Double.parseDouble(request.getParameter("user[jarak]"))));
             p.setID(timeStamp + x.getID());
             //cookies
-            Cookie Pesanan = new Cookie("pesanan", p.getID());;
+            Cookie Pesanan = new LongLivedCookie("pesanan", p.getID());;
             response.addCookie(Pesanan);
             //simpan pengiriman
             p.tambahPengiriman(p);
             this.tampil(request, response, p.getID());
+            }
         }
     }
 

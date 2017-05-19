@@ -36,12 +36,18 @@ public class ControlLogout extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-         Cookie cookie = null;
-	 Cookie[] cookies = null;
-      // Get an array of Cookies associated with this domain
-      cookies = request.getCookies();
-	  // Set response content type
-     this.tampil(request, response, "");
+        //set erase cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setValue(null);
+                cookie.setPath(null);
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+        // Set response content type
+        this.tampil(request, response, "");
     }
 
     @Override

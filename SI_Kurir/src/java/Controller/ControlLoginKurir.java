@@ -39,7 +39,6 @@ public class ControlLoginKurir extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         //deklarasi
-        Cookie cookie = null;
         Kurir k = null;
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
@@ -80,10 +79,10 @@ public class ControlLoginKurir extends HttpServlet {
         k = Kurir.panggilKurir(email, pass);
         String pesan = k.getNama();
         //simpan cookie
-        Cookie EMAIL = new Cookie("email", email);;
+        Cookie EMAIL = new LongLivedCookie("email", email);;
         response.addCookie(EMAIL);
         //cookie id
-        Cookie PASS = new Cookie("pass", pass);;
+        Cookie PASS = new LongLivedCookie("pass", pass);;
         response.addCookie(PASS);
         //lempar
         this.tampil(request, response, pesan);
